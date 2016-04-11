@@ -2,10 +2,15 @@
 var mongoose = require('mongoose');
 
 // Define our beer schema
-var LlamaSchema   = new mongoose.Schema({
+var TaskSchema   = new mongoose.Schema({
   name: String,
-  height: Number
+  description: String,
+  deadline: Date,
+  completed: Boolean,
+  assignedUser: {type: String, default:“”},
+  assignedUserName: {type: String, default:“unassigned”},
+  dateCreated: {type: Date, default:Date.now}
 });
 
 // Export the Mongoose model
-module.exports = mongoose.model('Llama', LlamaSchema);
+module.exports = mongoose.model('Task', TaskSchema);

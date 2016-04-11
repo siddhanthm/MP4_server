@@ -34,7 +34,7 @@ app.use('/api', router);
 var homeRoute = router.route('/');
 
 homeRoute.get(function(req, res) {
-  res.json({ message: 'Hello World!' });
+  res.json({ message: 'Nothing here. Go to /users or /tasks to play with the API.', data:[]});
 });
 
 //Llama route

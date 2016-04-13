@@ -5,8 +5,8 @@ var mongoose = require('mongoose');
 var UserSchema   = new mongoose.Schema({
   name: String,
   email: String,
-  pendingTasks:[String],
-  dateCreated: Date
+  pendingTasks:{type: [String], default: [""]},
+  dateCreated: {type: Date, default: Date.now}
 });
 
 // Export the Mongoose model

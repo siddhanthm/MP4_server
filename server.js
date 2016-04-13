@@ -60,13 +60,35 @@ homeRoute.get(function(req, res) {
 var userRoute = router.route('/users');
 
 userRoute.get(function(req,res){
-	User.find(function(err, users) {
-        // if there is an error retrieving, send the error. nothing after res.send(err) will execute
-        if (err)
-            res.send(err)
+	// User.find(function(err, users) {
+ //        // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+ //        if (err)
+ //            res.send(err)
 
-        res.json({message:'OK', data:users}); // return all users in JSON format
-    });
+ //        res.json({message:'OK', data:users}); // return all users in JSON format
+ //    });
+ 	var where = eval("("+req.query.where+")");
+ 	var sort = eval("("+req.query.sort+")");
+ 	var select = eval("("+req.query.select+")");
+ 	var skip = eval("("+req.query.skip+")");
+ 	var limit = eval("("+req.query.limit+")");
+ 	var count = eval("("+req.query.count+")");
+ 	if(count){
+ 		User.find(where).sort(sort).select(select).skip(skip).limit(limit).count(count).exec(function(err, users){
+ 			if(err)
+ 				res.send(err);
+ 			else
+ 				res.status(200).send({message:'OK', data:users});
+ 		});
+ 	}else{
+ 		User.find(where).sort(sort).select(select).skip(skip).limit(limit).exec(function(err, users){
+ 			if(err)
+ 				res.send(err);
+ 			else
+ 				res.status(200).send({message:'OK', data:users});
+ 		});
+ 	}
+
 });
 
 userRoute.options(function(req, res){
@@ -203,13 +225,27 @@ userRouteId.put(function(req,res){
 var taskRoute = router.route('/tasks');
 
 taskRoute.get(function(req,res){
-	Task.find(function(err, tasks) {
-        // if there is an error retrieving, send the error. nothing after res.send(err) will execute
-        if (err)
-            res.send(err)
-
-        res.json({message:'OK', data:tasks}); // return all tasks in JSON format
-    });
+ 	var where = eval("("+req.query.where+")");
+ 	var sort = eval("("+req.query.sort+")");
+ 	var select = eval("("+req.query.select+")");
+ 	var skip = eval("("+req.query.skip+")");
+ 	var limit = eval("("+req.query.limit+")");
+ 	var count = eval("("+req.query.count+")");
+ 	if(count){
+ 		Task.find(where).sort(sort).select(select).skip(skip).limit(limit).count(count).exec(function(err, tasks){
+ 			if(err)
+ 				res.send(err);
+ 			else
+ 				res.status(200).send({message:'OK', data:tasks});
+ 		});
+ 	}else{
+ 		Task.find(where).sort(sort).select(select).skip(skip).limit(limit).exec(function(err, tasks){
+ 			if(err)
+ 				res.send(err);
+ 			else
+ 				res.status(200).send({message:'OK', data:tasks});
+ 		});
+ 	}
 });
 
 taskRoute.options(function(req, res){

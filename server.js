@@ -202,8 +202,13 @@ userRouteId.put(function(req,res){
 								res.send(err);
 							else{
 								User.findById(req.params.id, function(err, users){
-									if(err)
-										res.send(err);
+									if(err){
+										if(err.code == 11000){
+											res.status(500).send({message:'User Already Exists!'});
+										}else{
+											res.send(err);
+										}
+									}
 									else if(users == undefined)
 										res.status(404).send({message:'User Does Not Exist', data:[]});
 									else

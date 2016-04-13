@@ -61,9 +61,9 @@ var userRoute = router.route('/users');
 
 userRoute.get(function(req,res){
 	// User.find(function(err, users) {
- //        // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+ //        // if there is an error retrieving, send the error. nothing after res.status(500).send(err) will execute
  //        if (err)
- //            res.send(err)
+ //            res.status(500).send(err)
 
  //        res.json({message:'OK', data:users}); // return all users in JSON format
  //    });
@@ -76,14 +76,14 @@ userRoute.get(function(req,res){
  	if(count){
  		User.find(where).sort(sort).select(select).skip(skip).limit(limit).count(count).exec(function(err, users){
  			if(err)
- 				res.send(err);
+ 				res.status(500).send(err);
  			else
  				res.status(200).send({message:'OK', data:users});
  		});
  	}else{
  		User.find(where).sort(sort).select(select).skip(skip).limit(limit).exec(function(err, users){
  			if(err)
- 				res.send(err);
+ 				res.status(500).send(err);
  			else
  				res.status(200).send({message:'OK', data:users});
  		});
@@ -108,7 +108,7 @@ userRoute.post(function(req,res){
 	else{
 		User.find({email:req.body.email}, function(err, userif){
 			if(err)
-				res.send(err);
+				res.status(500).send(err);
 			else if(userif.length != 0){
 				res.status(500).send({message: "User Already Exist!"});
 			}
@@ -119,7 +119,7 @@ userRoute.post(function(req,res){
 					pendingTasks : tasks
 				},function(err, users){
 					if(err)
-						res.send(err);
+						res.status(500).send(err);
 					else{
 						res.status(201).json({message:'User Added!', data:users});
 					}
@@ -142,7 +142,7 @@ userRouteId.get(function(req,res){
 	//res.send(req.params.id);
 	User.findById(req.params.id, function(err, users){
 		if(err)
-			res.send(err);
+			res.status(500).send(err);
 		else if(users == undefined)
 			res.status(404).send({message:'User Does Not Exist', data:[]});
 		else
@@ -153,16 +153,16 @@ userRouteId.get(function(req,res){
 userRouteId.delete(function(req,res){
 	User.findById(req.params.id, function(err, users){
 		if(err)
-			res.send(err);
+			res.status(500).send(err);
 		else if(users == undefined)
 			res.status(404).send({message:'User Does Not Exist'});
 		else{
 			User.findByIdAndRemove(req.params.id, function(err,user){
 				if(err)
-					res.send(err);
+					res.status(500).send(err);
 				User.find(function(err, users) {
             		if (err)
-               			res.send(err)
+               			res.status(500).send(err)
             		res.json({message:'User Deleted!', data:users});
        		 	});
 			});
@@ -173,7 +173,7 @@ userRouteId.delete(function(req,res){
 userRouteId.put(function(req,res){
 	User.findById(req.params.id, function(err, users){
 		if(err)
-			res.send(err);
+			res.status(500).send(err);
 		else if(users == undefined)
 			res.status(404).send({message:'User Does Not Exist', data:[]});
 		else{
@@ -189,7 +189,7 @@ userRouteId.put(function(req,res){
 			else{
 				//User.find({email:req.body.email, _id:{$not:{$eq: req.params.id}}}, function(err, userif){
 					/*if(err)
-						res.send(err);
+						res.status(500).send(err);
 					else if(userif.length != 0){
 						res.status(500).send({message: "User Already Exist!"});
 					}else{*/
@@ -199,14 +199,14 @@ userRouteId.put(function(req,res){
 							pendingTasks: tasks
 						}, function(err, users){
 							if(err)
-								res.send(err);
+								res.status(500).send(err);
 							else{
 								User.findById(req.params.id, function(err, users){
 									if(err){
 										if(err.code == 11000){
 											res.status(500).send({message:'User Already Exists!'});
 										}else{
-											res.send(err);
+											res.status(500).send(err);
 										}
 									}
 									else if(users == undefined)
@@ -239,14 +239,14 @@ taskRoute.get(function(req,res){
  	if(count){
  		Task.find(where).sort(sort).select(select).skip(skip).limit(limit).count(count).exec(function(err, tasks){
  			if(err)
- 				res.send(err);
+ 				res.status(500).send(err);
  			else
  				res.status(200).send({message:'OK', data:tasks});
  		});
  	}else{
  		Task.find(where).sort(sort).select(select).skip(skip).limit(limit).exec(function(err, tasks){
  			if(err)
- 				res.send(err);
+ 				res.status(500).send(err);
  			else
  				res.status(200).send({message:'OK', data:tasks});
  		});
@@ -279,7 +279,7 @@ taskRoute.post(function(req,res){
 			assignedUserName: user
 		},function(err, task){
 			if(err)
-				res.send(err);
+				res.status(500).send(err);
 			res.status(201).send({message: 'Task Created!', data: task});
 		});
 	}
@@ -295,7 +295,7 @@ var taskRouteId = router.route('/tasks/:id');
 taskRouteId.get(function(req,res){
 	Task.findById(req.params.id, function(err, task){
 		if(err)
-			res.send(err);
+			res.status(500).send(err);
 		else if(task == undefined)
 			res.status(404).send({message:'Task Does Not Exist'});
 		else
@@ -306,13 +306,13 @@ taskRouteId.get(function(req,res){
 taskRouteId.delete(function(req,res){
 	Task.findById(req.params.id, function(err, task){
 		if(err)
-			res.send(err);
+			res.status(500).send(err);
 		else if(task == undefined)
 			res.status(404).send({message:'Task Does Not Exist'});
 		else
 			Task.findByIdAndRemove(req.params.id, function(err,tasks){
 				if(err)
-					res.send(err);
+					res.status(500).send(err);
 				else
 					res.status(200).send({message: 'Task Deleted!'});
 			});
@@ -322,7 +322,7 @@ taskRouteId.delete(function(req,res){
 taskRouteId.put(function(req,res){
 	Task.findById(req.params.id, function(err, task){
 		if(err)
-			res.send(err);
+			res.status(500).send(err);
 		else if(task == undefined)
 			res.status(404).send({message:'Task Does Not Exist'});
 		else{
@@ -347,11 +347,11 @@ taskRouteId.put(function(req,res){
 					assignedUserName: user
 				},function(err, tasks){
 					if(err)
-						res.send(err);
+						res.status(500).send(err);
 					else{
 						Task.findById(req.params.id,function(err, taskupdate){
 							if(err)
-								res.send(err);
+								res.status(500).send(err);
 							else{
 								res.status(200).send({message:'User Updated!', data: taskupdate});
 							}
